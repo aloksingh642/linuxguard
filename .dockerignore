@@ -13,3 +13,6 @@ linuxguard.log
 
 tests/
 *.egg-info/
+
+.env
+.env.*
