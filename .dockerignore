@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+.git/
+.gitignore
+
+linuxguard.db
+linuxguard.log
+*.json
+*.csv
+
+tests/
+*.egg-info/

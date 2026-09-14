@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE / editors
+.vscode/
+.idea/
+
+# LinuxGuard runtime data
+linuxguard.db
+linuxguard.log
+
+# Generated reports / exports
+linuxguard_report.json
+linuxguard_directories.csv
+
+# Temporary files
+*.tmp
+*.temp
+
+# Environment variables / secrets
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build / packaging
+*.egg-info/
+dist/
+build/

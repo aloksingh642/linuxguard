@@ -1,0 +1,55 @@
+services:
+
+  api:
+    build:
+      context: .
+      args:
+        LINUXGUARD_UID: ${LINUXGUARD_UID:-1000}
+        LINUXGUARD_GID: ${LINUXGUARD_GID:-1000}
+
+    container_name: linuxguard-api
+
+    user: "${LINUXGUARD_UID:-1000}:${LINUXGUARD_GID:-1000}"
+
+    ports:
+      - "8000:8000"
+
+    environment:
+      DATABASE_URL: sqlite:////data/linuxguard.db
+      SCAN_ROOT: /host-home
+      CLEANUP_ROOT: /cleanup-home
+      SYSTEM_DISK_PATH: /host-root
+
+    volumes:
+      - linuxguard-data:/data
+      - /:/host-root:ro
+      - /home:/host-home:ro
+      - ${HOME}/Downloads:/cleanup-home/${USER}/Downloads:rw
+      - ${HOME}/.cache:/cleanup-home/${USER}/.cache:rw
+
+    command: uvicorn app.api:app --host 0.0.0.0 --port 8000
+
+  dashboard:
+    build:
+      context: .
+      args:
+        LINUXGUARD_UID: ${LINUXGUARD_UID:-1000}
+        LINUXGUARD_GID: ${LINUXGUARD_GID:-1000}
+
+    container_name: linuxguard-dashboard
+
+    user: "${LINUXGUARD_UID:-1000}:${LINUXGUARD_GID:-1000}"
+
+    ports:
+      - "8501:8501"
+
+    environment:
+      API_BASE_URL: http://api:8000
+
+    command: streamlit run dashboard.py --server.address=0.0.0.0 --server.port=8501
+
+    depends_on:
+      - api
+
+volumes:
+  linuxguard-data:

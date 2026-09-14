@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+psutil
+numpy
+scikit-learn
+streamlit
+requests
+altair
