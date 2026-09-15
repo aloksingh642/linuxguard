@@ -96,51 +96,65 @@ try:
 
 
 
-        st.subheader("Storage usage trend")
+        if not results:
+            st.info(
+                "No scan history available yet. "
+                "Run a storage scan to populate anomaly detection."
+            )
+        else:
+            st.subheader("Storage usage trend")
 
-        import pandas as pd
-        import altair as alt
+            import pandas as pd
+            import altair as alt
 
-        chart_data = pd.DataFrame({
-            "Scan": [result["scan_id"] for result in results],
-            "Usage (%)": [result["usage_percent"] for result in results],
-            "Anomaly": [result["anomaly"] for result in results]
-        })
+            chart_data = pd.DataFrame({
+                "Scan": [result["scan_id"] for result in results],
+                "Usage (%)": [
+                    result["usage_percent"]
+                    for result in results
+                ],
+                "Anomaly": [
+                    result["anomaly"]
+                    for result in results
+                ]
+            })
 
-        line = alt.Chart(chart_data).mark_line().encode(
-            x="Scan",
-            y="Usage (%)"
-        )
+            line = alt.Chart(chart_data).mark_line().encode(
+                x="Scan",
+                y="Usage (%)"
+            )
 
-        points = alt.Chart(
-            chart_data[chart_data["Anomaly"]]
-        ).mark_point(size=100).encode(
-            x="Scan",
-            y="Usage (%)",
-            tooltip=["Scan", "Usage (%)"]
-        )
+            points = alt.Chart(
+                chart_data[chart_data["Anomaly"]]
+            ).mark_point(size=100).encode(
+                x="Scan",
+                y="Usage (%)",
+                tooltip=["Scan", "Usage (%)"]
+            )
 
-        st.altair_chart(
-            line + points,
-            use_container_width=True
-        )
-        st.subheader("Storage growth rate")
+            st.altair_chart(
+                line + points,
+                use_container_width=True
+            )
 
-        growth_data = {
-            "Scan": [result["scan_id"] for result in results],
-            "Growth rate (bytes/sec)": [
-                result["growth_rate"]
-                for result in results
-            ]
-        }
+            st.subheader("Storage growth rate")
 
-        st.line_chart(
-            growth_data,
-            x="Scan",
-            y="Growth rate (bytes/sec)"
-        )
+            growth_data = {
+                "Scan": [
+                    result["scan_id"]
+                    for result in results
+                ],
+                "Growth rate (bytes/sec)": [
+                    result["growth_rate"]
+                    for result in results
+                ]
+            }
 
-
+            st.line_chart(
+                growth_data,
+                x="Scan",
+                y="Growth rate (bytes/sec)"
+            )
 
 
         if anomalies:
